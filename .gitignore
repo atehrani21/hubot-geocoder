@@ -1,2 +1,4 @@
 # WebStorm .idea file
 .idea
+# Node modules
+node_modules

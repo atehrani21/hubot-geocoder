@@ -9,34 +9,32 @@ var needle = require('needle');
  * @param {Object} msg
  * @param {String} apiKey
  * @param {String} botName. Default is "hubot"
+ * @param {Function} callback - the callback function processed on the client
  * @return {Object} the latitude and longitude of the user's inputted location
  * Note: may return more than one geocode depending on the location inputted.
  * You can easily configure the hubot to ask the user which location is correct
  */
-function hubotGeocode (msg, apiKey, botName) {
+function geocode (msg, apiKey, botName, callback) {
   var addressToURL = msg.message.text;
   if (!botName) botName = "hubot";
   addressToURL = addressToURL.replace(botName + " ", "").replace(/\s/g, "+");
   //get request for geocode (lat, lng)
   needle.get("https://maps.googleapis.com/maps/api/geocode/json?address="+addressToURL+"&key="+apiKey, function (err, resp) {
     if (err) {
-      return [{"status": 0, "error": err}];
+      callback(err, null);
+      return;
     }
     var results = resp.body.results;
-    var resultObject = {
-      "status": 1,
-      "error": null,
-      "resultArray": []
-    };
+    var resultArray = [];
     results.forEach(function (location) {
-      resultObject.resultArray.push({
+      resultArray.push({
         lat: location.geometry.location.lat,
         lng: location.geometry.location.lng
       });
     });
-    return resultObject;
+    callback(null, resultArray);
   });
 
 }
 
-module.exports = hubotGeocode;
+module.exports = geocode;

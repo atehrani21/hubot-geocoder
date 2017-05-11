@@ -12,12 +12,17 @@
   },
   "keywords": [
     "hubot",
-    "geocode"
+    "geocode",
+    "slack",
+    "hubot-scripts"
   ],
   "author": "Andrew Tehrani <atehrani21@gmail.com> (http://andrewtehrani.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/atehrani21/hubot-geocoder/issues"
   },
-  "homepage": "https://github.com/atehrani21/hubot-geocoder#readme"
+  "homepage": "https://github.com/atehrani21/hubot-geocoder#readme",
+  "dependencies": {
+    "needle": "^1.6.0"
+  }
 }
