@@ -40,35 +40,35 @@ module.exports = function(robot) {
       */
 
       var apiKey = "<your-google-maps-api-key>";
-      hubotGeocode.geocode(msg2, apiKey, "restaurantbot", function (err, resp) {
+      hubotGeocode(msg2, apiKey, "restaurantbot", function (err, resp) {
         if (err) {
           msg.reply("Oh no! Something went wrong while I was trying to get your coordinates. Check back in a bit, I'll get on it!");
           return;
         }
-	      var options = {
-	        headers : {
-	          'Content-Type': 'application/json'
-	        },
-	        location: resp[0].lat + "," + resp[0].lng,
-	        radius: 500,
-	        type: 'restaurant'
-	      };
-	      // get nearest restaurants by calling the google places api
-	      needle.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+options.location+"&radius=5000&type=restaurant&key="+apiKey, 
-	        function (err, resp) {
-	        if (err) {
-	          console.log("error!!");
-	          console.log(err);
-	          msg2.reply("Oh no, an error occured :(");
-	        } else {
-	          console.log("success!!");
-	          console.log(resp.body);
-	          resp.body.results.forEach(function (restaurant) {
-	            msg2.emote(restaurant.name + ", " + restaurant.vicinity);
-	          });
-	          msg2.reply("Got back something! Check the console");
-	        }
-	      });
+        var options = {
+          headers : {
+            'Content-Type': 'application/json'
+          },
+          location: resp[0].lat + "," + resp[0].lng,
+          radius: 500,
+          type: 'restaurant'
+        };
+        // get nearest restaurants by calling the google places api
+        needle.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+options.location+"&radius=5000&type=restaurant&key="+apiKey,
+          function (err, resp) {
+            if (err) {
+              console.log("error!!");
+              console.log(err);
+              msg2.reply("Oh no, an error occured :(");
+            } else {
+              console.log("success!!");
+              console.log(resp.body);
+              resp.body.results.forEach(function (restaurant) {
+                msg2.emote(restaurant.name + ", " + restaurant.vicinity);
+              });
+              msg2.reply("Got back something! Check the console");
+            }
+          });
       });
     });
   });
