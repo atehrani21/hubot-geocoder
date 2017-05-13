@@ -79,6 +79,23 @@ module.exports = function(robot) {
 * The hubot-conversation package is required in order for the geocoder to properly return the inputted coordinates. This is because we want our hubot to utilize the returned coordinates in further api calls, such as getting closest restaurants.
 * More than one pair of geocoded coordinates may be returned by the geocoder. If that is the case, you want to make sure the first object (resp[0]) contains the actual coordinates you want. To go around this, you could ask the user to select the correct location from the array of results.
 
+## Planned Features
+
+* Reformat to ES6 standard
+* Reverse geolocation
+* Custom regular expressions for messages that the user can send
+* Remove callbacks for promises
+
+hubot-geocoder is a constant work in progress, so if you would like to help with these features or suggest a custom feature, feel free to contribute!
+
+### How to Contribute
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request, and your done!
+
 ## License
 
 Licensed under the [MIT License](./LICENSE.md).
