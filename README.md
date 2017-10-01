@@ -45,7 +45,9 @@ hubotGeocode(userMessage, apiKey, botName, (err, resp) => {
 If hubot-geocoder was successful in retrieving the user's coordinates, a `response` array of objects will be contained within the callback. Usually the array will only contain one element, which is the object containing the user's `lat` and `lng` values. If multiple geocoordinates were returned (which can be the case if the user's location is too broad or associated with multiple locations), you can easily create another dialog to ask the user to specify which location.
 
 ```javascript
-
+[ { lat: 40.77664120000001,
+    lng: -73.9521468,
+    location: 'New York, NY 10028, USA' } ]
 ``` 
 
 Below is a sample usage using ES6 JavaScript.
