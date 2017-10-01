@@ -18,20 +18,50 @@ If you haven't done so already, head on over to the [Hubot Page](https://hubot.g
 
 ## Usage
 
-hubot-geocoder is intended to be used with a conversational dialog between the bot and the user. The current package being used for this is the [hubot-conversation](https://www.npmjs.com/package/hubot-conversation) package available on npm. It provides a convenient way for two-way conversation. Make sure you have this package installed and require it in your hubot script file. Below is a sample usage.
+hubot-geocoder is intended to be used with a conversational dialog between the bot and the user. The current package being used for this is the [hubot-conversation](https://www.npmjs.com/package/hubot-conversation) package available on npm. It provides a convenient way for two-way conversation. Make sure you have this package installed and require it in your hubot script file. 
+
+### Simple call to retrieve geocoordinates
+
+Retrieving the user's latitude and longitude values requires a call to the `hubotGeocode` function which utilizes the Google Maps API to return the most accurate results.
 
 ```javascript
-var Conversation = require('hubot-conversation');
-var hubotGeocode = require('hubot-geocode');
-var needle = require('needle');
+hubotGeocode(userMessage, apiKey, botName, (err, resp) => {
+	if (err) console.log("error: " + err);
+	else {
+		console.log("coordinates below");
+		console.log(resp);
+	}
+});
+```
+### Parameter Details
 
-module.exports = function(robot) {
-  var switchBoard = new Conversation(robot);
-  robot.hear(/get restaurants near me/, function(msg) {
-    var dialog = switchBoard.startDialog(msg);
+* `userMessage` - The message entered by the user containing their location information (address or zip code) formatted with the hubot-conversation `dialog` object.
+* `apiKey` - Your Google Maps API key used to call the Maps API to get the user's geocoordinates
+* `botName` - The name of your hubot (e.g. restaurantbot). If you don't have a custom name for your bot, enter `null` or `""`
+* `callback` - The callback function that will contain either an error if call to API was unsuccessful or a `response` object with the user's latitude and longitude if successful
+
+### Response Object
+
+If hubot-geocoder was successful in retrieving the user's coordinates, a `response` array of objects will be contained within the callback. Usually the array will only contain one element, which is the object containing the user's `lat` and `lng` values. If multiple geocoordinates were returned (which can be the case if the user's location is too broad or associated with multiple locations), you can easily create another dialog to ask the user to specify which location.
+
+```javascript
+
+``` 
+
+Below is a sample usage using ES6 JavaScript.
+
+```javascript
+const Conversation = require('hubot-conversation');
+const hubotGeocode = require('hubot-geocode');
+const needle = require('needle');
+
+function hubotRestaurant (robot) {
+  const switchBoard = new Conversation(robot);
+  robot.hear(/get restaurants near me/, (msg) => {
+    let dialog = switchBoard.startDialog(msg);
     msg.reply('Sure, What is your address or city, state? (e.g. New York, NY or 132 Main St, New York, NY)');
 
-    dialog.addChoice(/(^)/i, function (msg2) {
+    dialog.addChoice(/(^)/i, (msg2) => {
       /*
       * the geocode function returns an object that contains an array of latitudes and longitudes. In most cases,
       * there will be only one entry in that array, but sometimes the inputted location may return more than one pair of coordinates.
@@ -39,13 +69,15 @@ module.exports = function(robot) {
       * botName (your hubot's name. hubot is the default value if you don't have a custom bot set up.)
       */
 
-      var apiKey = "<your-google-maps-api-key>";
-      hubotGeocode(msg2, apiKey, "restaurantbot", function (err, resp) {
+      let apiKey = "<your-google-maps-api-key>";
+
+      // calling the geocoding function
+      hubotGeocode(msg2, apiKey, "restaurantbot", (err, resp) => {
         if (err) {
           msg.reply("Oh no! Something went wrong while I was trying to get your coordinates. Check back in a bit, I'll get on it!");
           return;
         }
-        var options = {
+        let options = {
           headers : {
             'Content-Type': 'application/json'
           },
@@ -55,7 +87,7 @@ module.exports = function(robot) {
         };
         // get nearest restaurants by calling the google places api
         needle.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+options.location+"&radius=5000&type=restaurant&key="+apiKey,
-          function (err, resp) {
+          (err, resp) => {
             if (err) {
               console.log("error!!");
               console.log(err);
@@ -73,6 +105,8 @@ module.exports = function(robot) {
     });
   });
 }
+
+module.exports = hubotRestaurant;
 ```
 
 ### Notes
@@ -81,10 +115,8 @@ module.exports = function(robot) {
 
 ## Planned Features
 
-* Reformat to ES6 standard
 * Reverse geolocation
 * Custom regular expressions for messages that the user can send
-* Remove callbacks for promises
 
 hubot-geocoder is a constant work in progress, so if you would like to help with these features or suggest a custom feature, feel free to contribute!
 

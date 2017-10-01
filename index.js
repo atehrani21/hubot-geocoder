@@ -1,4 +1,4 @@
-var needle = require('needle');
+const needle = require('needle');
 
 /*
  * Formats the user inputted address which is currently inside the msg object.
@@ -15,21 +15,22 @@ var needle = require('needle');
  * You can easily configure the hubot to ask the user which location is correct
  */
 function geocode (msg, apiKey, botName, callback) {
-  var addressToURL = msg.message.text;
+  let addressToURL = msg.message.text;
   if (!botName) botName = "hubot";
   addressToURL = addressToURL.replace(botName + " ", "").replace(/\s/g, "+");
   //get request for geocode (lat, lng)
-  needle.get("https://maps.googleapis.com/maps/api/geocode/json?address="+addressToURL+"&key="+apiKey, function (err, resp) {
+  needle.get("https://maps.googleapis.com/maps/api/geocode/json?address="+addressToURL+"&key="+apiKey, (err, resp) => {
     if (err) {
       callback(err, null);
       return;
     }
-    var results = resp.body.results;
-    var resultArray = [];
-    results.forEach(function (location) {
+    let results = resp.body.results;
+    let resultArray = [];
+    results.forEach( (location) => {
       resultArray.push({
         lat: location.geometry.location.lat,
-        lng: location.geometry.location.lng
+        lng: location.geometry.location.lng,
+        location: location.formatted_address
       });
     });
     callback(null, resultArray);
