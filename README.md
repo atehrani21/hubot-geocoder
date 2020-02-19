@@ -56,10 +56,11 @@ Below is a sample usage using ES6 JavaScript.
 const Conversation = require('hubot-conversation');
 const hubotGeocode = require('hubot-geocode');
 const needle = require('needle');
+const restaurantMessage = /get restaurants near me/;
 
 function hubotRestaurant (robot) {
   const switchBoard = new Conversation(robot);
-  robot.hear(/get restaurants near me/, (msg) => {
+  robot.hear(restaurantMessage, (msg) => {
     let dialog = switchBoard.startDialog(msg);
     msg.reply('Sure, What is your address or city, state? (e.g. New York, NY or 132 Main St, New York, NY)');
 
@@ -93,7 +94,7 @@ function hubotRestaurant (robot) {
             if (err) {
               console.log("error!!");
               console.log(err);
-              msg2.reply("Oh no, an error occured :(");
+              msg2.reply("An error has occured! Please check log for details.");
             } else {
               console.log("success!!");
               console.log(resp.body);

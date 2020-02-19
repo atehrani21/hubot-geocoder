@@ -1,6 +1,6 @@
 {
   "name": "hubot-geocoder",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A geocoder for hubot that utilizes the Google Maps API to return position coordinates based on a user inputted address.",
   "main": "index.js",
   "scripts": {

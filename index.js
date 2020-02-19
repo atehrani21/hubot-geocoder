@@ -21,7 +21,7 @@ function geocode (msg, apiKey, botName, callback) {
   //get request for geocode (lat, lng)
   needle.get("https://maps.googleapis.com/maps/api/geocode/json?address="+addressToURL+"&key="+apiKey, (err, resp) => {
     if (err) {
-      callback(err, null);
+      callback(err, "There was an error retrieving your coordinates, please try again later.");
       return;
     }
     let results = resp.body.results;
