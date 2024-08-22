@@ -67,7 +67,7 @@ function hubotRestaurant (robot) {
     dialog.addChoice(/(^)/i, (msg2) => {
       /*
       * the geocode function returns an object that contains an array of latitudes and longitudes. In most cases,
-      * there will be only one entry in that array, but sometimes the inputted location may return more than one pair of coordinates.
+      * there will be only one entry in that array, but sometimes the location inputted may return more than one pair of coordinates.
       * The inputs are msg2 (the message from the hubot-conversation dialog function), apiKey (your google maps api key),
       * botName (your hubot's name. hubot is the default value if you don't have a custom bot set up.)
       */
